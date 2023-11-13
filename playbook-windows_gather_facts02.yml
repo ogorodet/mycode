@@ -8,7 +8,5 @@
   
     - name: What did gather_facts return?
       ansible.builtin.debug:
-        msg: 
-          - "{{ ansible_facts.interfaces }}"
-          - "{{ ansible_facts.processor }}"
-          - "{{ ansible_facts.memtotal_mb }}"
+        var: ansible_facts.interfaces[0].ipv4.address
+
