@@ -1,0 +1,14 @@
+---
+- name: Download resources with win_get_url
+  hosts: windows
+  #connection: winrm   # we already mapped this in our inventory
+
+  vars:
+          nasa_apod: "https://api.nasa.gov/assets/img/general/apod.jpg"
+
+  tasks:
+    - name: Remove a file, if present
+      ansible.windows.win_file:
+        path: "C:\\Users\\{{ ansible_user }}\\Desktop\\nasa_apod.jpg"
+        state: absent
+
