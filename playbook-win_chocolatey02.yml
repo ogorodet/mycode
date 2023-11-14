@@ -1,0 +1,16 @@
+---
+- name: MultiPackage Installer
+  hosts: windows         
+  connection: winrm     
+  gather_facts: true   
+
+  tasks:
+
+    - name: Install Multiple Packages
+      chocolatey.chocolatey.win_chocolatey:
+        name:
+        - git
+        - putty
+        - 7zip
+        state: present
+
