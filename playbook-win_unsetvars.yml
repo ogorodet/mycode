@@ -1,0 +1,20 @@
+---
+- name: manipulate multiple environmental variables
+  hosts: windows
+  connection: winrm
+  gather_facts: true
+  
+  vars:
+    EMPTY : ''
+  
+  tasks:
+  
+  - name: set environmental variables on a windows machine
+    ansible.windows.win_environment:
+      level: machine                 # environmental variable available to all users
+      variables:                     # map multiple variables at once
+        MY_ENV_VAR: "{{ EMPTY }}"
+        MY_APP_VAR: "{{ EMPTY }}"
+        MY_APP_VAR_TWO: "{{ EMPTY }}"
+        MCFLY: "{{ EMPTY }}"
+
