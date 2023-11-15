@@ -1,0 +1,17 @@
+---
+- name: Example playbook for Azure
+  gather_facts: false
+  hosts: localhost
+  connection: local
+
+  tasks:
+
+  - name: Create a resource group
+    azure_rm_resourcegroup:
+      state: "{{ state }}"
+      name: myResourceGroup
+      location: westus
+      tags:
+        testing: testing
+        delete: never
+
