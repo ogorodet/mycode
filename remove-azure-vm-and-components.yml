@@ -6,19 +6,21 @@
   vars_files:
     - azvms_vars.yml
   
-  vars:
-      state: "absent"
-
   tasks:
-    #     - name: Dump some vars
-    #   debug:
-    #     msg:
-    #       - "tag1 : {{ tags.tag1 }}"
-    #       - "tag2: {{ tags.tag2 }}"
-    #       - "Offer: {{ vm_image.offer }}"
-    #       - "Publisher: {{ vm_image.publisher }}"
-    #       - "SKU: {{ vm_image.sku }}"
-    #       - "Version: {{ vm_image.version }}"
+    - name: Ensure state var is set to absent
+      set_fact:
+        state: "absent"
+
+    #- name: Dump some vars
+    #  debug:
+    #    msg:
+    #      - "State: {{ state }}"
+    #      - "tag1 : {{ tags.tag1 }}"
+    #      - "tag2: {{ tags.tag2 }}"
+    #      - "Offer: {{ vm_image.offer }}"
+    #      - "Publisher: {{ vm_image.publisher }}"
+    #      - "SKU: {{ vm_image.sku }}"
+    #      - "Version: {{ vm_image.version }}"
 
     # - name: pause
     #   pause: 

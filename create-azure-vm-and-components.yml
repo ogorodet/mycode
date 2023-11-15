@@ -6,6 +6,10 @@
     - azvms_vars.yml
 
   tasks:
+    - name: Ensure state var is set to present
+      set_fact:
+        state: "present"
+
     #     - name: Dump some vars
     #   debug:
     #     msg:
@@ -19,7 +23,7 @@
     # - name: pause
     #   pause: 
     #     prompt: "Press Enter to continue or Ctrl+C to abort"
-
+ 
     - name: Create a resource group
       azure.azcollection.azure_rm_resourcegroup:
         state: "{{ state }}"
