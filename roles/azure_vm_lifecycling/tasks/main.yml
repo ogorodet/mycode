@@ -1,0 +1,20 @@
+---
+- name: deploy VM with exception handler
+  when: build_state == "present"
+  block:
+  - name: deploy a vm
+    ansible.builtin.import_tasks:
+      file: create_vm.yml
+  
+  rescue:
+    - name: remove a vm
+      ansible.builtin.import_tasks:
+        file: destroy_vm.yml
+
+  - name: remove vm cleanup function
+    ansible.builtin.import_tasks:
+      file: destroy_vm.yml
+    when: build_state == "absent"
+
+
+      

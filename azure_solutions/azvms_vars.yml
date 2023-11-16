@@ -1,0 +1,43 @@
+---
+# Common
+state: "present"
+tags:
+  tag1: "testing"
+  tag2: "never"
+
+# RG Vars
+rg_name: "Testing"
+rg_location: "westus"
+
+# VNET vars
+vnet_name: "testvn01"
+vnet_cidr: "10.10.0.0/16"
+
+# Subnet Vars
+sn_name: "subner001"
+sn_cidr: "10.10.0.0/24"
+
+# Pub IP vars
+pubip_name: "secgroup001"
+pubip_method: "Static"
+
+# SG Vars
+sg_name: "secgroup001"
+sg_rule_name: "SSH"
+sg_rule_proto: "Tcp"
+sg_rule_dir: "Inbound"
+
+# NIC vars
+nic_name: "testnic001"
+
+# VM vars
+vm_name: "testvm001"
+vm_size: "Standard_B1s"
+vm_disk: "Standard_LRS"
+vm_user: "bruce_wayne"
+vm_pw: "GoAlta3!"
+vm_image:
+  offer: "debian-11"
+  publisher: "Debian"
+  sku: "11-backports-gen2"   # this is a "gen 2 image"
+  version: "latest"

@@ -1,0 +1,92 @@
+- name: Build the components for an Azure VM
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  
+  vars_files:
+    - azvms_vars.yml
+  
+  tasks:
+    - name: Ensure state var is set to absent
+      set_fact:
+        state: "absent"
+
+    #- name: Dump some vars
+    #  debug:
+    #    msg:
+    #      - "State: {{ state }}"
+    #      - "tag1 : {{ tags.tag1 }}"
+    #      - "tag2: {{ tags.tag2 }}"
+    #      - "Offer: {{ vm_image.offer }}"
+    #      - "Publisher: {{ vm_image.publisher }}"
+    #      - "SKU: {{ vm_image.sku }}"
+    #      - "Version: {{ vm_image.version }}"
+
+    # - name: pause
+    #   pause: 
+    #     prompt: "Press Enter to continue or Ctrl+C to abort"
+
+
+    - name: Remove virtual machine
+      azure.azcollection.azure_rm_virtualmachine:
+        state: "{{ state }}"
+        resource_group: "{{ rg_name }}"
+        name: "{{ vm_name }}"
+        vm_size: "{{ vm_size }}"   # for a list see --> https://learn.microsoft.com/en-us/azure/virtual-machines/generation-2
+        managed_disk_type: "{{ vm_disk }}"
+        admin_username: "{{ vm_user }}"
+        admin_password: "{{ vm_pw }}"
+        network_interfaces: "{{ nic_name }}" # for list of images see --> https://az-vm-image.info/
+        image: "{{ vm_image }}"
+
+    - name: Remove  NIC
+      azure.azcollection.azure_rm_networkinterface:
+        state: "{{ state }}"
+        resource_group: "{{ rg_name }}"
+        name: "{{ nic_name }}"
+        virtual_network: "{{ vnet_name }}"
+        subnet: "{{ sn_name }}"
+        public_ip_name: "{{ pubip_name }}"
+        security_group: "{{ sg_name }}"
+
+    - name: Remove security group that allows SSH
+      azure.azcollection.azure_rm_securitygroup:
+        state: "{{ state }}"
+        resource_group: "{{ rg_name }}"
+        name: "{{ sg_name }}"
+        rules:
+          - name: "{{ sg_rule_name }}"
+            protocol: "{{ sg_rule_proto }}"
+            destination_port_range: 22
+            access: Allow
+            priority: 101
+            direction: "{{ sg_rule_dir }}"
+
+    - name: Remove public ip
+      azure.azcollection.azure_rm_publicipaddress:
+        state: "{{ state }}"
+        resource_group: "{{ rg_name }}"
+        allocation_method: "{{ pubip_method }}"
+        name: "{{ pubip_name }}"
+
+    - name: Remove subnet
+      azure.azcollection.azure_rm_subnet:
+        state: "{{ state }}"
+        resource_group: "{{ rg_name }}"
+        name: "{{ sn_name }}"
+        address_prefix: "{{ sn_cidr }}"
+        virtual_network: "{{ vnet_name }}"
+
+    - name: Remove virtual network
+      azure.azcollection.azure_rm_virtualnetwork:
+        state: "{{ state }}"
+        resource_group: "{{ rg_name }}"
+        name: "{{ vnet_name }}"
+        address_prefixes: "{{ vnet_cidr }}"
+
+    - name: Remove a resource group
+      azure.azcollection.azure_rm_resourcegroup:
+        state: "{{ state }}"
+        name: "{{ rg_name }}"
+        location: "{{ rg_location }}"
+        tags: "{{ tags }}"
